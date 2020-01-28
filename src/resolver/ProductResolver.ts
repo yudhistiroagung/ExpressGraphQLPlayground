@@ -1,6 +1,6 @@
-import { Resolver, Query } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg } from 'type-graphql';
 
-import { Product } from '../schema';
+import { Product, ProductInput } from '../schema';
 
 const fakeProducts: Product[] = [
     {
@@ -15,12 +15,27 @@ const fakeProducts: Product[] = [
         unitCost: 10000,
         price: 15000,
     }
-]
+];
 
-@Resolver()
+@Resolver(Product)
 export class ProductResolver {
+
     @Query(() => [Product])
     public async products(): Promise<Product[]> {
         return fakeProducts;
     }
+
+    @Mutation(() => Product)
+    async createProduct(
+        @Arg('input', () => ProductInput!) input: ProductInput,
+    ): Promise<Product> {
+        const id: string = Date.now().toString();
+        const addedProduct = {
+            ...input,
+            id,
+        }
+        fakeProducts.push(addedProduct);
+        return addedProduct;
+    }
+
 }
