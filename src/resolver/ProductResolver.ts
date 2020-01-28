@@ -1,6 +1,6 @@
 import { Resolver, Query } from 'type-graphql';
 
-import { Product } from '../schema/Product';
+import { Product } from '../schema';
 
 const fakeProducts: Product[] = [
     {
@@ -20,7 +20,7 @@ const fakeProducts: Product[] = [
 @Resolver()
 export class ProductResolver {
     @Query(() => [Product])
-    public async products() {
+    public async products(): Promise<Product[]> {
         return fakeProducts;
     }
 }
