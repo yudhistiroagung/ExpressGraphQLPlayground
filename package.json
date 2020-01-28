@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
-    "start": "nodemon --exec ts-node src/index.ts"
+    "start": "nodemon --exec ts-node src/index.ts",
+    "push" : "yarn lint; git add .; git commit -m 'commit'; git push origin master"
   },
   "keywords": [],
   "author": "",
