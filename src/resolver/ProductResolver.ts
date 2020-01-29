@@ -43,14 +43,26 @@ export class ProductResolver {
         @Arg('id', () => String!) id: string,
         @Arg('input', () => ProductInput) input: ProductInput,
     ): Promise<Product> {
-        const idx = fakeProducts.findIndex((p: Product) => p.id === id);
-        if (idx < 0)
-            throw new Error(`Product with id ${id} not found!`);
+        const idx = this.findIndexOrThrowError(id);
         fakeProducts[idx] = {
             ...fakeProducts[idx],
             ...input,
         };
         return fakeProducts[idx];
+    }
+
+    @Mutation(() => Boolean)
+    async delete(@Arg('id', () => String!) id: string) {
+        const idx = this.findIndexOrThrowError(id);
+        fakeProducts.splice(idx, 1);
+        return true;
+    }
+
+    private findIndexOrThrowError(id: string): number {
+        const idx = fakeProducts.findIndex((p: Product) => p.id === id);
+        if (idx < 0)
+            throw new Error(`Product with id ${id} not found!`);
+        return idx;
     }
 
 }
