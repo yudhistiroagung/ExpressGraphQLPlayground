@@ -38,4 +38,19 @@ export class ProductResolver {
         return addedProduct;
     }
 
+    @Mutation(() => Product)
+    async updateProduct(
+        @Arg('id', () => String!) id: string,
+        @Arg('input', () => ProductInput) input: ProductInput,
+    ): Promise<Product> {
+        const idx = fakeProducts.findIndex((p: Product) => p.id === id);
+        if (idx < 0)
+            throw new Error(`Product with id ${id} not found!`);
+        fakeProducts[idx] = {
+            ...fakeProducts[idx],
+            ...input,
+        };
+        return fakeProducts[idx];
+    }
+
 }
