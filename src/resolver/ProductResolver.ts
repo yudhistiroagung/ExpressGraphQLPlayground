@@ -21,8 +21,14 @@ const fakeProducts: Product[] = [
 export class ProductResolver {
 
     @Query(() => [Product])
-    public async products(): Promise<Product[]> {
+    async products(): Promise<Product[]> {
         return fakeProducts;
+    }
+
+    @Query(() => Product)
+    async product(@Arg('id', () => String!) id: string): Promise<Product> {
+        const idx = this.findIndexOrThrowError(id);
+        return fakeProducts[idx];
     }
 
     @Mutation(() => Product)

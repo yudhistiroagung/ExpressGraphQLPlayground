@@ -1,4 +1,8 @@
-import { Int, Field, InputType, ArgsType } from 'type-graphql';
+import {
+    Int,
+    Field,
+    InputType,
+} from 'type-graphql';
 
 @InputType({ description: 'New product object' })
 export class ProductInput {
