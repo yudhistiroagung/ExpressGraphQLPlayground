@@ -47,7 +47,7 @@ export class ProductResolver {
     @Mutation(() => Product)
     async updateProduct(
         @Arg('id', () => String!) id: string,
-        @Arg('input', () => ProductInput) input: ProductInput,
+        @Arg('input', () => ProductInput!) input: ProductInput,
     ): Promise<Product> {
         const idx = this.findIndexOrThrowError(id);
         fakeProducts[idx] = {
