@@ -1,34 +1,23 @@
 import { Resolver, Query, Mutation, Arg } from 'type-graphql';
 
 import { Product, ProductInput } from '../schema';
-
-const fakeProducts: Product[] = [
-    {
-        id: '1',
-        name: 'Ayam Goreng',
-        unitCost: 7000,
-        price: 13000,
-    },
-    {
-        id: '2',
-        name: 'Rendang Sapi',
-        unitCost: 10000,
-        price: 15000,
-    }
-];
+import { ProductService } from '../service';
 
 @Resolver(Product)
 export class ProductResolver {
 
+    constructor(
+        private readonly productService: ProductService,
+    ) { }
+
     @Query(() => [Product])
     async products(): Promise<Product[]> {
-        return fakeProducts;
+        return this.productService.getProducts();
     }
 
     @Query(() => Product)
     async product(@Arg('id', () => String!) id: string): Promise<Product> {
-        const idx = this.findIndexOrThrowError(id);
-        return fakeProducts[idx];
+        return this.productService.getProduct(id);
     }
 
     @Mutation(() => Product)
@@ -40,8 +29,7 @@ export class ProductResolver {
             ...input,
             id,
         }
-        fakeProducts.push(addedProduct);
-        return addedProduct;
+        return this.productService.addProduct(addedProduct);
     }
 
     @Mutation(() => Product)
@@ -49,26 +37,17 @@ export class ProductResolver {
         @Arg('id', () => String!) id: string,
         @Arg('input', () => ProductInput!) input: ProductInput,
     ): Promise<Product> {
-        const idx = this.findIndexOrThrowError(id);
-        fakeProducts[idx] = {
-            ...fakeProducts[idx],
+        const updatedProduct = {
             ...input,
-        };
-        return fakeProducts[idx];
+            id,
+        }
+        return this.productService.updateProduct(updatedProduct)
     }
 
     @Mutation(() => Boolean)
     async delete(@Arg('id', () => String!) id: string) {
-        const idx = this.findIndexOrThrowError(id);
-        fakeProducts.splice(idx, 1);
+        await this.productService.deleteProduct(id);
         return true;
-    }
-
-    private findIndexOrThrowError(id: string): number {
-        const idx = fakeProducts.findIndex((p: Product) => p.id === id);
-        if (idx < 0)
-            throw new Error(`Product with id ${id} not found!`);
-        return idx;
     }
 
 }
