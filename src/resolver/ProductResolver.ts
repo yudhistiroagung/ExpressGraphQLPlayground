@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Arg } from 'type-graphql';
 
-import { Product, ProductInput } from '../schema';
+import { Product, ProductInput } from '../entity';
 import { ProductService } from '../service';
 
 @Resolver(Product)

@@ -1,4 +1,4 @@
-import { Product } from '../schema';
+import { Product } from '../entity';
 import { delay } from '../util';
 import { Service } from 'typedi';
 
